@@ -20,7 +20,8 @@ This snippet should work for your user settings:
 
     "syntaxes": [
         {
-            "name": ["Firefall/BetterLua-Firefall", "BetterLua/BetterLua"],
+            "name": "Firefall/BetterLua-Firefall",
+            "extensions": ["lua"],
             "rules": [
                 {"file_name": ".*/Firefall/.*\\.lua$"},
             ]

@@ -1,0 +1,225 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: Lua (Better-Firefall)
+comment: Improved Lua syntax (Greatly inspired by SublimeLove and SublimeLua syntax files)
+scopeName: source.lua
+fileTypes: [lua]
+uuid: adf0c904-8baa-40e9-837b-17758d42d0ce
+
+patterns:
+- include: '#general'
+
+repository:
+  general:
+    patterns:
+    - include: '#string-single'
+    - include: '#string-double'
+    - include: '#string-multiline'
+    - include: '#comment-block'
+    - include: '#comment-line'
+    - include: '#numeric-constant'
+    - include: '#lua-constant'
+    - include: '#lua-self'
+    - include: '#function-definition'
+    - include: '#lua-function-require'
+    - include: '#firefall-function'
+    - include: '#lua-function'
+    - include: '#function-call'
+    - include: '#block-if'
+    - include: '#block-for'
+    - include: '#block-while'
+    - include: '#block-repeat'
+    - include: '#table'
+    - include: '#table-index'
+    - include: '#lua-logic'
+    - include: '#lua-operator'
+    - include: '#lua-keyword'
+    - include: '#variable'
+
+  string-single:
+    name: string.quoted.single.lua
+    begin: "'"
+    beginCaptures:
+      '0': {name: punctuation.definition.string.begin.lua}
+    end: "'"
+    endCaptures:
+      '0': {name: punctuation.definition.string.end.lua}
+    patterns:
+    - match: \\.
+      name: constant.character.escape.lua
+
+  string-double:
+    name: string.quoted.double.lua
+    begin: '"'
+    beginCaptures:
+      '0': {name: punctuation.definition.string.begin.lua}
+    end: '"'
+    endCaptures:
+      '0': {name: punctuation.definition.string.end.lua}
+    patterns:
+    - name: constant.character.escape.lua
+      match: \\.
+
+  string-multiline:
+    name: string.quoted.other.multiline.lua
+    begin: (?<!--)\[(=*)\[
+    beginCaptures:
+      '0': {name: punctuation.definition.string.begin.lua}
+    end: \]\1\]
+    endCaptures:
+      '0': {name: punctuation.definition.string.end.lua}
+
+  comment-block:
+    name: comment.block.lua
+    begin: --\[(=*)\[
+    end: \]\1\]
+    captures:
+      '0': {name: punctuation.definition.comment.lua}
+
+  comment-line:
+    name: comment.line.double-dash.lua
+    match: (--)(?!\[\[).*$\n?
+    captures:
+      '1': {name: punctuation.definition.comment.lua}
+
+  numeric-constant:
+    name: constant.numeric.lua
+    match: (?<![\d.])\s0x[a-fA-F\d]+|\b\d+(\.\d+)?([eE]-?\d+)?|\.\d+([eE]-?\d+)?
+
+  lua-constant:
+    name: constant.language.lua
+    match: (?<![^.]\.|:)\b(false|nil|true|_G|_VERSION|math\.(pi|huge))\b|(?<![.])\.{3}(?!\.)
+
+  lua-self:
+    name: variable.language.self.lua
+    match: (?<![^.]\.|:)\b(self)\b
+
+  function-definition:
+    name: meta.function.lua
+    begin: \b(function)\s?([a-zA-Z_.:]+[.:])?([a-zA-Z_]\w*)?\s*(\()([^)]*)(\))
+    beginCaptures:
+      '1': {name: keyword.control.lua}
+      '2': {name: entity.name.function.scope.lua}
+      '3': {name: entity.name.function.lua}
+      '4': {name: punctuation.definition.parameters.begin.lua}
+      '5': {name: variable.parameter.function.lua}
+      '6': {name: punctuation.definition.parameters.end.lua}
+    end: \bend\b
+    endCaptures:
+      '0': {name: keyword.control.lua}
+    patterns:
+    - include: '#general'
+
+  lua-function-require:
+    name: support.function
+    match: (?:require (["'][^"']+["']))|(?:require\(([^\)]+)\))
+    captures:
+      '1': {name: string.quoted.lua}
+      '2': {name: string.quoted.lua}
+ 
+  firefall-function:
+    name: meta.functioncall.lua
+    begin: (?<![^.]\.|:)\b((ActivityDirector\.(LogActivityPush|LogDirectActivityRequest|LogLongTimeWithoutPush|RequestMission))|(Chat\.(CensorProfanity|CheckSameInstance|GetChannelList|GetLocalUserInfo|GetUserInfo|JoinLanguageZoneChat|SendChannelText|SendWhisperText|WriteInstanceKey))|(Component\.(ActivateUserKeybinds|ApplyLanguageRules|AreUserKeybindsActive|BeginDragDrop|BindEvent|BindUserKey|ClearGlobalCursorOverride|CreateAnchor|CreateFrame|CreateRenderTarget|CreateSceneObject|CreateWidget|EndDragDrop|FosterWidget|GenerateEvent|GetCursorPos|GetDragInfo|GetFrame|GetInfo|GetInputMode|GetMouseButtonState|GetPanelFocus|GetRandomPlayerName|GetScreenSize|GetSetting|GetSettingKeys|GetTextureInfo|GetTitleSafe|GetUserBoundKey|GetWidget|HasPanelFocus|IsAddon|IsWidget|LookupColor|LookupSound|LookupText|PostMessage|RegisterKeyAction|RemoveAnchor|RemoveFrame|RemoveLocalizationTracking|RemoveRenderTarget|RemoveSceneObject|RemoveWidget|SaveSetting|SetDragAccept|SetGlobalCursorOverride|SetInputMode|SetLockoutTag|SetRenderTargetRegion|SetTextInput|UnbindEvent|UnregisterKeyAction))|(Database\.(GetHeadAccessoryInfo|GetHeadInfo))|(Encounter\.(GetBombDirection|GetCapturePointInfo|GetEncounterInfo|GetPoiInfo|GetProxyInfo|GetProxyList|GetStartTime|GetTeamInfo|RequestPublicInfo))|(Friends\.(Accept|Add|Decline|GetList|GetRequest|Remove|UpdateMyPresence))|(Game\.(AcceptPvPMatch|AcceptResourceScan|AddRecipeToCart|BuildGlobalCharacterList|CanItemGoInSlot|CanTrackRecipe|CanUIActivateItem|ChunkCoordToWorld|ClaimTokenVendorRewards|ClearTrail|ClearWayPoint|ConfirmDuel|EnableWorldMapGlobeView|FindServiceProvider|GetAccessoryInfo|GetArcJobs|GetArmyInfo|GetAvailableTargets|GetCameraPos|GetCertificationInfo|GetCharacterColorsById|GetCharacterTypeInfo|GetDecalInfo|GetEncounterUiFields|GetFoundMatch|GetFrameConstraintsMultipliers|GetFreeTrailHandle|GetGameVariable|GetGlobeViewLocations|GetHeadInfo|GetItemCraftingUnitsCost|GetItemInfoByType|GetItemRepairCost|GetItemTypesOfResourceType|GetKnownResourceLocations|GetLFGCategories|GetLoadingProgress|GetLoadoutInfoByType|GetMapCoordinates|GetMapMarkerInfo|GetMapMarkerList|GetMatchLoadState|GetModuleSlotsForItem|GetNetworkState|GetOrnamentInfo|GetPerkInfo|GetPerkModuleInfo|GetPickingPosition|GetPreviewItemInfo|GetProgressionUnlocks|GetPvPMatchId|GetPvPQueue|GetRecipe|GetRecipeIds|GetRecipeInfo|GetRecipeList|GetResourceNodeCompleteResults|GetResourcePoolSize|GetResourceScanIds|GetResourceScanInfo|GetResourceTypeInfo|GetResourceTypesList|GetRootItemInfo|GetSinCardFields|GetSkinOverrideInfo|GetSpecializationCertificates|GetStatusEffectInfo|GetSubzoneNameAt|GetTabMapBounds|GetTargetBoneInfo|GetTargetBounds|GetTargetCharacterInfo|GetTargetHardpoints|GetTargetIdByName|GetTargetInfo|GetTargetRespawnTime|GetTargetStatus|GetTargetVitals|GetTeamInfo|GetTeams|GetTokenVendorInfo|GetTutorialChainInfo|GetVoiceListInfo|GetWarpaintInfo|GetWarpaintPatternInfo|GetWayPoint|GetWorldMapGlobeEntityId|GetWorldObjectInfo|GetWorldObjectList|GetWorldObjectStatus|GetZoneId|GetZoneInfo|HighlightEntity|IsInPvP|IsItemOfType|IsTargetAvailable|IsTrackingRecipe|IsWorldMapVisible|JoinSquadLeadersArc|ListRoutes|QueueForLFG|QueueForPvP|RemoveRecipeFromCart|RequestCancelArc|RequestDuel|RequestGlobalCount|RequestGlobalMilestoneInfo|RequestKnownResourceLocations|RequestStartArc|RequestTransfer|RequiredLevelForSlot|RespondToServerQuery|ReturnToPvE|RotateWorldMapGlobeToZone|SendDialogResponse|SendMissionUiMessage|SendUIMessageToEncounter|SetMapCoordinates|SetMapCruiseControl|SetMapFlightRoutes|SetMapInputMode|SetRadarRange|SetTrailAlpha|SetTrailColor|SetTrailRefreshRate|SetTrailTitle|SetWayPoint|ShowTrailTo|ShowWorldMap|SlashCommand|SpectateBomb|SpectatePlayer|SpendTokenAtVendor|StartItemSearch|TryActivateMenu|Unstuck|VotekickRespond|VotekickStart|WorldToChunkCoord|ZoomWorldMap))|(HTTP\.(IsRequestPending|IssueRequest|NumOfPendingRequests))|(Lobby\.(AcceptInvite|Create|DeclineInvite|GetAvailableMaps|GetInvites|GetMatchParameters|GetRoster|Invite|Kick|Leave|ReadyCheck|SetPowerPrivilege|SetReady|SetTeam|SetZoneId|StartMatch|SwapTeam))|(Market\.(FillBuyOrder|SellItem|SellResourceStack|Toggle))|(Paperdoll\.(ApplyPlayerCharacterInfo|Center|Create|GetCharacterInfo|GetDims|GetPosition|GetRotation|GetScale|GetSpin|IsStreaming|LoadItem|PlayEmote|Release|SetDisplayLod|SetEquipment|SetPosition|SetRotation|SetScale|SetSpin|SetTeam))|(Platoon\.(AcceptInvite|ClearWayPoint|ConvertToPlatoon|DeclineInvite|GetIndexOf|GetLeader|GetMaxPlatoonSize|GetQueueRestrictions|GetRoster|GetVitals|GetWayPoint|Invite|IsInPlatoon|IsLeaderInPvP|IsLeaderOnSameInstance|IsLeaderOnSameZone|JoinLeader|Kick|Leave|Promote|SetWayPoint))|(Playback\.(StartGamePlayback))|(Player\.(AbilityUpdatesLocked|AbortCampaignMission|ActivateTech|BeginInteraction|CanDetectResources|EndInteraction|EquipLoadout|FlushCharacterCache|GetAbilities|GetAbilityCharges|GetAbilityInfo|GetAbilityState|GetAchievementIDs|GetAchievementInfo|GetAchievementPointTotal|GetActiveDeployables|GetAim|GetAimPosition|GetAllProgressionXp|GetAttachmentId|GetAttachmentInfo|GetAttribute|GetAttributeCategory|GetAvailableInteractives|GetBattleFrameCerts|GetCampaignMissionIds|GetCertByType|GetCharacterCerts|GetCharacterId|GetCharacterInfo|GetCharacterState|GetConsumableItems|GetCurrentArchtype|GetCurrentLoadout|GetCurrentLoadoutId|GetCurrentLoadoutWeb|GetCurrentOutpostId|GetCurrentProgressionXp|GetEffectiveLevel|GetEnergy|GetFakeItemIcons|GetGliderStatus|GetHardpointChoices|GetInfo|GetInteractMenuChoices|GetInteracteeInfo|GetInventory|GetInventoryBags|GetInventoryWeight|GetItemCount|GetItemIdList|GetItemInfo|GetItemProperties|GetJobStatus|GetLeaveZoneCountdown|GetLevel|GetLifeInfo|GetLifetimeTotalXp|GetLoadoutConstraintLevels|GetLoadoutInfo|GetLoadoutInfoByID|GetLoadoutList|GetMailInventory|GetMissionIds|GetMissionInfo|GetMoneyBoostModifier|GetNeedOrGreeds|GetPerkRespecs|GetPermissions|GetPosition|GetProgressionXpForFrame|GetQueueRestrictions|GetResourceBoostModifier|GetResourceInfo|GetRespawnTimes|GetReticleInfo|GetSalvageInfo|GetScoreBoard|GetSeat|GetSelectedAbility|GetSelfFeedbackPosition|GetShoppingList|GetSinControlStatus|GetSinStatus|GetSlottedItemAtIndex|GetSpectatorMode|GetStatusEffects|GetTargetId|GetTeamId|GetTimePlayed|GetTimePlayedSeconds|GetUnlockInfo|GetUnlocks|GetUnlocksByType|GetVIPTime|GetWallet|GetWeaponCharge|GetWeaponIndex|GetWeaponInfo|GetWeaponMode|GetWeaponState|GetWorkbenches|GetXPBoostModifier|IsDevChar|IsInCinamaticMode|IsInFirstPerson|IsInVehicle|IsLocalCharacterId|IsReady|IsSpectating|IsUsingFlashlight|IsUsingGamepad|PlaySinImprint|RequestPause|RequestRepairItems|RequestSalvageItems|RequestSelfRevive|RequestSlotGear|RequestSlotModule|RequestTeleport|RequestUnpause|RequestUnslotAllModules|SelectHardpoint|SetForcedAfk|SetInventoryBagName|SetNeedOrGreed|SlotTech|SwapInventoryBagSlots|TryResumeTutorialChain|UpdateMissions))|(Radio\.(StartRadioWithSecureDialogID))|(Sinvironment\.(Activate|AlphaModelTo|BeginEditPattern|BeginPickTattooPosition|BeginPlaceTattoo|CreateLight|CreateModel|EnableMouseFocus|EndEditPattern|EndPickTattooPosition|EndPlaceTattoo|FinishModelAlpha|FinishModelOrientation|FinishModelPosition|FinishModelScale|GetFixedCameraInfo|GetLightAnchor|GetLoadingProgress|GetManualCamera|GetModelAlpha|GetModelAnchor|GetModelBounds|GetModelOrientation|GetModelPosition|GetModelScale|GetModelShaderParamID|GetNumFixedCamera|GetOrnamentVisuals|GetPatternTransform|GetTattooMatrix|IsActive|IsValidModel|LoadCharacterComponent|LoadCharacterEyes|LoadCharacterOrnament|LoadItemType|LoadZone|OrientModelTo|PlayModelAnimation|PositionModelTo|PreviewVoice|QueueModelAlpha|QueueModelOrientation|QueueModelPosition|QueueModelScale|RemoveLight|RemoveModel|ResetCharacterEmissive|ScaleModelTo|SetAnimatedCamera|SetCharacterEmissive|SetCharacterFrameLevel|SetCharacterSex|SetCharacterVisualOverride|SetCharacterWarpaint|SetFixedCameraID|SetGradients|SetLightColor|SetLightFadeParams|SetLightFovXYSoftness|SetManualCamera|SetModelAlpha|SetModelAnimationParameter|SetModelLOD|SetModelMaterialOverride|SetModelOrientation|SetModelPosition|SetModelScale|SetModelShaderParam|SetPatternKeyState|SetPatternTransform|SetPatterns|SetTattooKeyState|SetTattooMatrix|SetTattooTextureOnSceneObject|SetTattoos|ShaderParamModelTo))|(Squad\.(AcceptInvite|ClearWayPoint|ConvertToSquad|DeclineInvite|GetIndexOf|GetLeader|GetLeaderJobStatus|GetMaxSquadSize|GetQueueRestrictions|GetRoster|GetVitals|GetWayPoint|Invite|IsInSquad|IsLeaderInPvP|IsLeaderOnSameInstance|IsLeaderOnSameZone|JoinLeader|Kick|Leave|Promote|SetWayPoint))|(System\.(ApplyKeyBindings|ApplyRecommendedSettings|ApplySettings|AutoscaleUi|BindDefaultKey|BindKey|BlurMainScene|CanUserSeeBlood|EnableSinTags|EnableVsync|GameSFXVolume|GetAdvancedSettingsEnabled|GetArg|GetClientTime|GetConfig|GetCurrentFps|GetCvar|GetDate|GetDesktopResolution|GetElapsedTime|GetElapsedUnixTime|GetFictionDate|GetFrameDuration|GetGpuInfo|GetKeyBindings|GetKeycodeString|GetLocalUnixTime|GetLocale|GetModifierKey|GetOperatorSetting|GetProtocolVersion|GetRecommendedVideoQuality|GetResInfo|GetSettings|GetSettingsRange|GetSupportedLanguages|GetUISetMode|InvertGamepad|InvertMouse|IsDevMode|IsUnderMinSpec|ListFullscreenResolutions|LogPrecisionTime|Logout|Mute|OverrideMusic|PlaySound|PlaySoundOnActor|PopUrl|RefreshSettings|ReloadUI|ScaleUi|SetBattleChatterVolume|SetCurrentGpu|SetCvar|SetDialogVolume|SetGameVolume|SetHitDingPitch|SetHitDingVolume|SetLocale|SetMasterVolume|SetModifierKey|SetMusicVolume|SetResolution|SetSettings|SetUIVolume|SetViolenceSetting|Shutdown|SwapGamepadThumbsticks|SwapLocalCharacterAbilities|TakeScreenshot|TestResolution|VsyncEnabled))|(TwitchTV\.(Auth|Start|Status|Stop))|(Vehicle\.(GetVehicleInfo|GetVitals))|(Voip\.(GetAudioOutputs|GetDefaultAudioOutput|GetDefaultMicrophone|GetInputVolume|GetMicrophones|GetOutputVolume|GetSelectedAudioOutput|GetSelectedMicrophone|SelectAudioOutput|SelectMicrophone|SetAutoJoinSquadConference|SetInputVolume|SetOutputVolume))|(X360\.(DisplayKeyboardUI)))\b(?=[( {])
+    beginCaptures:
+      '1': {name: support.function.vendor.lua.firefall}
+    end: \)
+    patterns:
+    - include: '#general'
+
+  lua-function:
+    name: meta.functioncall.lua
+    begin: (?<![^.]\.|:)\b(assert|collectgarbage|dofile|error|getfenv|getmetatable|ipairs|loadfile|loadstring|module|next|pairs|pcall|print|rawequal|rawget|rawset|select|setfenv|setmetatable|tonumber|tostring|type|unpack|xpcall|coroutine\.(create|resume|running|status|wrap|yield)|string\.(byte|char|dump|find|format|gmatch|gsub|len|lower|match|rep|reverse|sub|upper)|table\.(concat|insert|maxn|remove|sort)|math\.(abs|acos|asin|atan2?|ceil|cosh?|deg|exp|floor|fmod|frexp|ldexp|log|log10|max|min|modf|pow|rad|random|randomseed|sinh?|sqrt|tanh?)|io\.(close|flush|input|lines|open|output|popen|read|tmpfile|type|write)|os\.(clock|date|difftime|execute|exit|getenv|remove|rename|setlocale|time|tmpname)|package\.(cpath|loaded|loadlib|path|preload|seeall)|debug\.(debug|[gs]etfenv|[gs]ethook|getinfo|[gs]etlocal|[gs]etmetatable|getregistry|[gs]etupvalue|traceback))\b(?=[( {])
+    beginCaptures:
+      '1': {name: support.function.lua}
+    end: \)
+    patterns:
+    - include: '#general'
+
+  block-if:
+    name: meta.block.if.lua
+    begin: \bif\b
+    beginCaptures:
+      '0': {name: keyword.control.lua}
+    end: \bend\b
+    endCaptures:
+      '0': {name: keyword.control.lua}
+    patterns:
+    - include: '#general'
+
+  block-for:
+    name: meta.block.for.lua
+    begin: \bfor\b
+    beginCaptures:
+      '0': {name: keyword.control.lua}
+    end: \bend\b
+    endCaptures:
+      '0': {name: keyword.control.lua}
+    patterns:
+    - include: '#general'
+
+  block-while:
+    name: meta.block.while.lua
+    begin: \bwhile\b
+    beginCaptures:
+      '0': {name: keyword.control.lua}
+    end: \bend\b
+    endCaptures:
+      '0': {name: keyword.control.lua}
+    patterns:
+    - include: '#general'
+
+  block-repeat:
+    name: meta.block.repeat.lua
+    begin: \brepeat\b
+    beginCaptures:
+      '0': {name: keyword.control.lua}
+    end: \buntil\b
+    endCaptures:
+      '0': {name: keyword.control.lua}
+    patterns:
+    - include: '#general'
+
+  function-call:
+    name: meta.functioncall.lua
+    begin: (?:(\w[\w\d]*)(?:(?:\.(\w[\w\d\.]*))*)[\.:](\w[\w\d]*)\()|(?:(\w[\w\d]*)\()
+    beginCaptures:
+      '1': {name: variable.object.lua}
+      '2': {name: variable.object.nested.lua}
+      '3': {name: meta.call.method.other.lua}
+      '4': {name: meta.call.function.other.lua}
+    end: \)
+    patterns:
+    - include: '#general'
+
+  table:
+    name: meta.tabledecl.lua
+    begin: '{'
+    end: '}'
+    patterns:
+    - include: '#general'
+  
+  table-index:
+    name: meta.arrayindex.lua
+    begin: \[
+    end: \]
+    patterns:
+    - include: '#general'
+
+  lua-logic:
+    name: keyword.operator.lua
+    match: \b(and|or|not)\b
+
+  lua-operator:
+    name: keyword.operator.lua
+    match: \+|-|%|#|\*|\/|\^|==?|~=|<=?|>=?|(?<!\.)\.{2}(?!\.)
+
+  lua-keyword:
+    name: keyword.control.lua
+    match: \b(break|do|else|for|if|elseif|return|then|repeat|while|until|end|function|local|in)\b
+
+  variable:
+    name: variable.other.lua
+    match: (\w[\w\d]*)\.(?:(?:(\w[\w\d\.]*)\.)*)(\w[\w\d]*)|(\w[\w\d]*)
+    captures:
+      '1': {name: variable.object.lua}
+      '2': {name: variable.object.nested.lua}

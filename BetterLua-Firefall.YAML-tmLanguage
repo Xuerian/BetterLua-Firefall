@@ -30,9 +30,9 @@ repository:
     - include: '#lua-function'
     - include: '#function-call'
     - include: '#table'
-    - include: '#table-index'
     - include: '#lua-logic'
     - include: '#lua-operator'
+    - include: '#variable-index'
     - include: '#variable'
 
   string-single:
@@ -192,15 +192,8 @@ repository:
 
   table:
     name: meta.tabledecl.lua
-    begin: '{'
-    end: '}'
-    patterns:
-    - include: '#general'
-  
-  table-index:
-    name: meta.arrayindex.lua
-    begin: \[
-    end: \]
+    begin: \{
+    end: \}
     patterns:
     - include: '#general'
 
@@ -215,6 +208,17 @@ repository:
   lua-keyword:
     name: keyword.control.lua
     match: \b(break|do|else|for|if|elseif|return|then|repeat|while|until|end|function|local|in)\b
+
+  variable-index:
+    name: meta.tableindex.lua
+    begin: (?:(\w[\w\d]*)\.(?:(?:(\w[\w\d\.]*)\.?)*)|(\w[\w\d]*))\[
+    end: \]
+    beginCaptures:
+      '1': {name: variable.object.lua}
+      '2': {name: variable.object.nested.lua}
+      '3': {name: variable.object.lua}
+    patterns:
+    - include: '#general'
 
   variable:
     name: variable.other.lua

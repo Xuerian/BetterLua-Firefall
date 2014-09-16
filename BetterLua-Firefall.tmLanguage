@@ -377,15 +377,15 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#table-index</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#lua-logic</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#lua-operator</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable-index</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -575,27 +575,11 @@
 		<key>table</key>
 		<dict>
 			<key>begin</key>
-			<string>{</string>
+			<string>\{</string>
 			<key>end</key>
-			<string>}</string>
+			<string>\}</string>
 			<key>name</key>
 			<string>meta.tabledecl.lua</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#general</string>
-				</dict>
-			</array>
-		</dict>
-		<key>table-index</key>
-		<dict>
-			<key>begin</key>
-			<string>\[</string>
-			<key>end</key>
-			<string>\]</string>
-			<key>name</key>
-			<string>meta.arrayindex.lua</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -623,6 +607,40 @@
 			<string>(\w[\w\d]*)\.(?:(?:(\w[\w\d\.]*)\.)*)(\w[\w\d]*)|(\w[\w\d]*)</string>
 			<key>name</key>
 			<string>variable.other.lua</string>
+		</dict>
+		<key>variable-index</key>
+		<dict>
+			<key>begin</key>
+			<string>(?:(\w[\w\d]*)\.(?:(?:(\w[\w\d\.]*)\.?)*)|(\w[\w\d]*))\[</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.object.lua</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.object.nested.lua</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.object.lua</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\]</string>
+			<key>name</key>
+			<string>meta.tableindex.lua</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#general</string>
+				</dict>
+			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>

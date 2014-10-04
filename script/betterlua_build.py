@@ -21,7 +21,7 @@ regex = "|".join("({}\\.({}))".format(module, "|".join(str(method) for method in
 
 replacements = [
 	["Lua (Better)", "Lua (Better Firefall)"],
-	["scopeName: source.lua", "scopeName: source.vendor.lua.firefall"],
+	["scopeName: source.lua", "scopeName: source.lua.firefall"],
 	["fileTypes: [lua]\n", ""],
 	["uuid: ", "# uuid: "],
 	["#VENDOR ", ""],

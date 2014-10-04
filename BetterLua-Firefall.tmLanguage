@@ -644,6 +644,6 @@
 		</dict>
 	</dict>
 	<key>scopeName</key>
-	<string>source.vendor.lua.firefall</string>
+	<string>source.lua</string>
 </dict>
 </plist>

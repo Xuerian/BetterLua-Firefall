@@ -2,7 +2,7 @@
 ---
 name: Lua (Better Firefall)
 comment: Detailed lua language
-scopeName: source.vendor.lua.firefall
+scopeName: source.lua.firefall
 # uuid: adf0c904-8baa-40e9-837b-17758d42d0ce
 
 patterns:
